@@ -54,6 +54,11 @@ One such case is when a script's hotkeys for various actions are configurable vi
 I know it's sort of an ugly action but, you gotta do what you gotta do for that performance :)
 */
 
+/*
+Using Wrapper making a auto-updater of script:
+VERSION = 5.58
+*/
+
 #NoEnv
 #SingleInstance Force
 SendMode Input
@@ -419,9 +424,6 @@ return
     EXE := "C:\Program Files (x86)\Auto POS"
     RunWait, % ComSpec . " /c """ . LABEL_EXE . " """, % EXE, hide
 return
-!1::
-    msgbox, hello
-return
 
 ; item price update
 !v::
@@ -640,6 +642,15 @@ x::	; Advance Unlimited
             if is_window_active(CASH_WIN){
                 PARTIAL_CASH := true
             }
+            ; Open Cash Drawer Script
+            COMPort := "COM1" ; Change this to your COM port if needed
+            FileAppend, `e, %COMPort%
+            if (ErrorLevel = 0) {
+                MsgBox, Cash drawer command sent successfully.
+            } else {
+                MsgBox, Failed to send cash drawer command.
+            }
+
             critical, off
         }
     } else {
@@ -1523,7 +1534,7 @@ _start_transaction(original_price:=0, is_ebt := false){
         ; If we are at a main window. It means that either the transaction errored or went successful
         if is_main_window() {
 
-            Sleep, 2000
+            Sleep, 1000
             data := db_.execute("SELECT TOP(1) Invoice_Number FROM Invoice_Totals ORDER BY DateTime DESC")
             CURRENT_INVOICE := data[2,1]
 
@@ -1549,7 +1560,7 @@ _start_transaction(original_price:=0, is_ebt := false){
             ; if the window does not exist then it implies
             ; that either the whole process went smooth or there was a cancellation via user
             ; i.e. Transaction went successful or user pressed the cancel button
-            Sleep, 2000
+            Sleep, 1000
             ; Get the latest data from database
             data := db_.execute("SELECT TOP(1) Invoice_Number FROM Invoice_Totals ORDER BY DateTime DESC")
             CURRENT_INVOICE := data[2,1]
