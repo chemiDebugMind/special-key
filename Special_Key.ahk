@@ -54,10 +54,7 @@ One such case is when a script's hotkeys for various actions are configurable vi
 I know it's sort of an ugly action but, you gotta do what you gotta do for that performance :)
 */
 
-/*
-Using Wrapper making a auto-updater of script:
-VERSION = 5.58
-*/
+
 
 #NoEnv
 #SingleInstance Force
@@ -423,6 +420,10 @@ return
     LABEL_EXE := """C:\Program Files (x86)\Auto POS\AutoPOS.exe"" --cli -az "
     EXE := "C:\Program Files (x86)\Auto POS"
     RunWait, % ComSpec . " /c """ . LABEL_EXE . " """, % EXE, hide
+return
+
+!1:: ; version check of script
+    alert_message("Special key version: V5.58")
 return
 
 ; item price update
