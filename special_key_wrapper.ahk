@@ -1,78 +1,84 @@
 #SingleInstance, Force
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
-
+run_as_admin()
 
 ; URL to download the latest version of the main script
 scriptURL := "https://raw.githubusercontent.com/chemiDebugMind/special-key/main/Special_Key.ahk"
 localScript := "Special_Key.ahk"
 
-run_as_admin()
-
-
 ; Close any running process that starts with "Special_Key"
-ProcessList := []
-for process in ComObject("WbemScripting.SWbemLocator").ConnectServer().ExecQuery("Select * from Win32_Process")
-{
-    if (RegExMatch(process.Name, "^Special_Key"))
-    {
-        ProcessList.Push(process.ProcessId)
-    }
-}
-
-for index, pid in ProcessList
-{
-    Process, Close, %pid%
-}
+; Using AutoHotkey's built-in commands
+SetTimer, CloseSpecialKey, -1
 
 Sleep, 1000 ; Wait a second to ensure the processes are fully closed
+
 ; Get the Windows startup folder path
 EnvGet, startupFolder, APPDATA
 startupFolder := startupFolder . "\Microsoft\Windows\Start Menu\Programs\Startup"
 
 ; Download the script to the startup folder
 UrlDownloadToFile, %scriptURL%, %startupFolder%\%localScript%
-
 if (ErrorLevel = 0) {    
     ; Define paths
     sourceScript := startupFolder . "\" . localScript
     outputExe := startupFolder . "\Special_Key.exe"
     compilerPath := "C:\Program Files\AutoHotkey\Compiler\Ahk2Exe.exe"
-    
+   
     ; Compile the AHK script to EXE
     RunWait, %compilerPath% /in "%sourceScript%" /out "%outputExe%", , Hide
-    
+   
     ; Check if the EXE was created successfully
     if FileExist(outputExe)
     {
         FileDelete, %sourceScript%
         if (ErrorLevel = 0) {
-            MsgBox, The downloaded AHK file was deleted successfully.
+            alert_message("The downloaded AHK file was deleted successfully.")
             ; Run the newly created executable
             Run, %outputExe%
             if (ErrorLevel = 0) {
-                MsgBox, The new executable has been started.
+                alert_message("The new executable has been started.")
+
             } else {
-                MsgBox, There was an error starting the new executable.
+                alert_message("There was an error starting the new executable.")
+
             }
         } else {
-            MsgBox, There was an error deleting the AHK file.
+            alert_message("There was an error deleting the AHK file.")
+
         }
     }
     else
     {
-        MsgBox, There was an error compiling the script.
+        alert_message("There was an error compiling the script.")
+
     }
 } else {
-    MsgBox, Error downloading the script. Error level: %ErrorLevel%
+    alert_message("Error downloading the script.")
 }
 
+; Function to close Special_Key processes
+CloseSpecialKey:
+    WinGet, id, list,,, Program Manager
+    Loop, %id%
+    {
+        this_id := id%A_Index%
+        WinGet, this_name, ProcessName, ahk_id %this_id%
+        If InStr(this_name, "Special_Key") = 1
+        {
+            WinClose, ahk_id %this_id%
+        }
+    }
+return
+
+
+alert_message(msg){
+    MsgBox,262144,,%msg%, 1
+}
 
 ; Run as admin
 run_as_admin(){
-    ; Snippet taken from AHK documentation
     full_command_line := DllCall("GetCommandLine", "str")
-
     if not (A_IsAdmin or RegExMatch(full_command_line, " /restart(?!\S)"))
     {
         try
@@ -84,5 +90,4 @@ run_as_admin(){
         }
         ExitApp
     }
-
 }

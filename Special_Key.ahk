@@ -423,7 +423,7 @@ return
 return
 
 !1:: ; version check of script
-    alert_message("Special key version: V5.58")
+    alert_message("Special key version: V5.57")
 return
 
 ; item price update
@@ -643,15 +643,6 @@ x::	; Advance Unlimited
             if is_window_active(CASH_WIN){
                 PARTIAL_CASH := true
             }
-            ; Open Cash Drawer Script
-            COMPort := "COM1" ; Change this to your COM port if needed
-            FileAppend, `e, %COMPort%
-            if (ErrorLevel = 0) {
-                MsgBox, Cash drawer command sent successfully.
-            } else {
-                MsgBox, Failed to send cash drawer command.
-            }
-
             critical, off
         }
     } else {
