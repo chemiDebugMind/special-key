@@ -41,7 +41,7 @@ if (ErrorLevel = 0) {
 
             } else {
                 alert_message("There was an error starting the new executable.")
-
+                msgbox, %ErrorLevel%
             }
         } else {
             alert_message("There was an error deleting the AHK file.")
@@ -56,6 +56,8 @@ if (ErrorLevel = 0) {
 } else {
     alert_message("Error downloading the script.")
 }
+ExitApp
+
 
 ; Function to close Special_Key processes
 CloseSpecialKey:
