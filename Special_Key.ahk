@@ -423,7 +423,7 @@ return
 return
 
 !1:: ; version check of script
-    alert_message("Special key version: V5.58")
+    alert_message("Special key version: V5.57")
 return
 
 ; item price update
