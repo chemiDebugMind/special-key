@@ -59,16 +59,7 @@ if (ErrorLevel = 0) {
 
 ; Function to close Special_Key processes
 CloseSpecialKey:
-    WinGet, id, list,,, Program Manager
-    Loop, %id%
-    {
-        this_id := id%A_Index%
-        WinGet, this_name, ProcessName, ahk_id %this_id%
-        If InStr(this_name, "Special_Key") = 1
-        {
-            WinClose, ahk_id %this_id%
-        }
-    }
+    Process, Close, Special_Key.exe
 return
 
 
