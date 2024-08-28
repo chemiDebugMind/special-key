@@ -4,8 +4,8 @@ SetWorkingDir, %A_ScriptDir%
 run_as_admin()
 
 ; URL to download the latest version of the main script
-scriptURL := "https://raw.githubusercontent.com/chemiDebugMind/special-key/main/Special_Key.ahk"
-localScript := "Special_Key.ahk"
+scriptURL := "https://raw.githubusercontent.com/chemiDebugMind/special-key/main/Special_Keys.ahk"
+localScript := "Special_Keys.ahk"
 
 ; Close any running process that starts with "Special_Key"
 ; Using AutoHotkey's built-in commands
@@ -22,7 +22,7 @@ UrlDownloadToFile, %scriptURL%, %startupFolder%\%localScript%
 if (ErrorLevel = 0) {    
     ; Define paths
     sourceScript := startupFolder . "\" . localScript
-    outputExe := startupFolder . "\Special_Key.exe"
+    outputExe := startupFolder . "\Special_Keys.exe"
     compilerPath := "C:\Program Files\AutoHotkey\Compiler\Ahk2Exe.exe"
    
     ; Compile the AHK script to EXE

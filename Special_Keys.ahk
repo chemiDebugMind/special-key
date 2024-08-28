@@ -643,6 +643,21 @@ x::	; Advance Unlimited
             if is_window_active(CASH_WIN){
                 PARTIAL_CASH := true
             }
+            printer := "USB001"  ; Change this to match your printer's port
+            VarSetCapacity(RawData, 5, 0)
+            NumPut(0x1B, RawData, 0, "UChar")  ; ESC
+            NumPut(0x70, RawData, 1, "UChar")  ; p
+            NumPut(0x00, RawData, 2, "UChar")  ; Pin 2
+            NumPut(0x19, RawData, 3, "UChar")  ; On time
+            NumPut(0x19, RawData, 4, "UChar")  ; Off time
+            
+            FileAppend %RawData%, *%printer%
+            if (ErrorLevel = 0) {
+                alert_message("Cash Door Opens")
+            }
+            else{
+                alert_message("Error on cash door open")
+            }
             critical, off
         }
     } else {
